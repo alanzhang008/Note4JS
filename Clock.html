@@ -1,0 +1,156 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<title>Clock</title>
+</head>
+<body>
+
+<label id="navigator_one" onclick="countDown();" style="color: #030303;">Count Down</label>
+<label id="navigator_two" onclick="chronograph();" style="color: #B5B5B5">Chronograph</label>
+<br />
+<br />
+<div id="countDown_d">
+<!--set time div-->
+<div id="set_time" style="height:20px;">
+<!--hours-->
+<select id="hour" style="border: 0;-webkit-appearance:none;font-size: 30px;"></select> 
+<label style="font-size: 10px;">h</label>
+<!--minutes-->
+<select id="min" style="border: 0;-webkit-appearance:none;font-size: 30px;"></select> 
+<label style="font-size: 10px;">m</label>
+<!--seconds-->
+<select id="sec" style="border: 0;-webkit-appearance:none;font-size: 30px;"></select> 
+<label style="font-size: 10px;">s</label>
+</div>
+<!--set time div end-->
+
+<!--count down div-->
+<div id="count_down" style="height:20px; display: none;">
+<label id="count_down_hour" style="font-size: 30px;">00</label>
+<label style="font-size: 30px;">: </label>
+<label id="count_down_min" style="font-size: 30px;">00</label>
+<label style="font-size: 30px;">: </label>
+<label id="count_down_sec" style="font-size: 30px;">00</label>
+</div>
+<!--count down div end-->
+<br />
+<br />
+<input type="button" id="start" value="START" onclick="start();" />
+<input type="hidden" id="stop" value="STOP" onclick="stop();" />
+</div>
+
+<div id="chronograph_d" style="height: 20px; display: none;">
+</div>
+
+<script type="text/javascript">
+//initialize options
+initOption();
+function initOption(){
+	var secEle = document.getElementById('sec');
+	var minEle = document.getElementById('min');
+	var hourEle = document.getElementById('hour');
+	var opt = null;
+	for(var i = 0;i < 60;i ++){
+		if(i < 10){
+			i = "0" + i;
+		}
+		opt += "<option>" + i + "</option>";
+		secEle.innerHTML = opt;
+		minEle.innerHTML = opt;
+		hourEle.innerHTML = opt;
+	}
+}
+//count down module
+function countDown(){
+	//show the countDown_d div
+	document.getElementById('countDown_d').style.display = "";
+	//hide the chronograph_d div
+	document.getElementById('chronograph_d').style.display = "none";
+	//change color of the navigator
+	document.getElementById('navigator_one').style.color = "#030303";
+	document.getElementById('navigator_two').style.color = "#B5B5B5";	
+}
+
+var hours = 0;
+var mins = 0;
+var secs = 0;
+var interval = null;
+function start(){
+	document.getElementById('set_time').style.display = "none";
+	document.getElementById('count_down').style.display = "";
+	document.getElementById('start').type = "hidden";
+	document.getElementById('stop').type = "button";
+
+	hours = parseInt(document.getElementById('hour').value);
+	mins = parseInt(document.getElementById('min').value);
+	secs = parseInt(document.getElementById('sec').value);
+
+	//alert(hours);
+
+	interval = setInterval(startCountDown,1000);
+}
+function stop(){
+	document.getElementById('set_time').style.display = "";
+	document.getElementById('count_down').style.display = "none";
+	document.getElementById('stop').type = "hidden";
+	document.getElementById('start').type = "button";
+	clearInterval(interval);
+}
+
+//
+function startCountDown(){
+	if(secs == 0){ //secs == 0
+		if(mins == 0){ //mins == 0
+			if(hours == 0){ //hours == 0
+				formatTime();
+				clearInterval(interval);
+				return;
+			}else{ //hours != 0
+				hours --;
+				mins = 59;
+				secs = 59;
+				formatTime();
+			}
+		}else{ //mins != 0;
+			mins --;
+			secs = 59;
+			formatTime();
+		}
+	}else{ //secs != 0
+		secs --;
+		formatTime();
+	}
+
+	document.getElementById('count_down_hour').innerHTML = hours;
+	document.getElementById('count_down_min').innerHTML = mins;
+	document.getElementById('count_down_sec').innerHTML = secs;
+}
+
+//put a "0" before the value of "hours","mins" or "secs" if one of their values is less 
+//than ten
+function formatTime(){
+	if(hours < 10 && hours.toString().length == 1){
+		hours = "0" + hours;
+	}
+	if(mins < 10 && mins.toString().length == 1){
+		mins = "0" + mins;
+	}
+	if(secs < 10 && secs.toString().length == 1){
+		secs = "0" + secs;
+	}
+}
+</script>
+<script type="text/javascript">
+//chronograph module
+function chronograph(){
+	//hide the countDown_d div
+	document.getElementById('countDown_d').style.display = "none";
+	//show the chronograph_d div
+	document.getElementById('chronograph_d').style.display = "";
+	//change color of the navigator
+	document.getElementById('navigator_two').style.color = "#030303";
+	document.getElementById('navigator_one').style.color = "#B5B5B5";
+}
+</script>
+</body>
+</html>
