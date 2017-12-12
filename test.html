@@ -5,13 +5,16 @@
 	<title>A_A</title>
 </head>
 <body>
-
+<input type="button" value="ClickMe" onclick="Click();" />
 </body>
 </html>
 <script>
+function Greeting(name,greeting){
+	alert("Hello" + name + "," + greeting);
+}
 
-function test(){
-	
+function Click(){
+	setInterval(Greeting,1000,'Yap','How you do?');
 }
 
 </script>
